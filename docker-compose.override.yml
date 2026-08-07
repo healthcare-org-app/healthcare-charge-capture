@@ -1,0 +1,25 @@
+services:
+  charge-capture-service:
+    build: .
+    container_name: ${NAME_UNDERSCORE}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://healthcare:healthcare_dev@postgres:5432/billing
+      KAFKA_BOOTSTRAP: kafka:9092
+      SERVICE_HOST_MODE: docker
+      PORT_EHR_SERVICE: "8300"
+      PORT_CODING_SERVICE: "8702"
+      PORT_AUDIT_LOG_SERVICE: "8007"
+      LOG_LEVEL: INFO
+    ports:
+      - "8701:8701"
+    networks:
+      - healthcare_net
+    volumes:
+      - ../../libs/py-healthcare-common:/opt/py-healthcare-common:ro
+    command: >
+      sh -c "pip install -e /opt/py-healthcare-common && python -m app.main"

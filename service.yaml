@@ -1,0 +1,13 @@
+name: charge-capture-service
+port: 8701
+lang: python
+description: "charge-capture-service \u2014 domain: billing"
+http_deps:
+- ehr-service
+- coding-service
+- audit-log-service
+publishes:
+- charge.captured
+- audit.event
+subscribes:
+- encounter.ended
