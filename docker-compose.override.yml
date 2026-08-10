@@ -1,7 +1,7 @@
 services:
   charge-capture-service:
     build: .
-    container_name: ${NAME_UNDERSCORE}
+    container_name: charge_capture_service
     depends_on:
       postgres:
         condition: service_healthy
